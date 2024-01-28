@@ -111,7 +111,7 @@ public class SwerveModule extends SubsystemBase {
     setAngle(desiredState);
     setSpeed(desiredState);
     SmartDashboard.putString("Swerve [" + driveMotor.getDeviceId() + "] State", getState().toString());
-    Logger.getInstance().recordOutput("Drivetrain/Module " + driveMotor.getDeviceId() + " State", getState());
+    Logger.recordOutput("Drivetrain/Module " + driveMotor.getDeviceId() + " State", getState());
   }
 
   public void setRawState(SwerveModuleState desiredState){

@@ -139,9 +139,28 @@ public class Drivetrain extends SubsystemBase {
     sideSpeed = RobotContainer.driverController.getRightTriggerAxis() > 0.25 ? sideSpeed * 0.30 : sideSpeed;
     turnSpeed = RobotContainer.driverController.getRightTriggerAxis() > 0.35 ? turnSpeed * 0.20 : turnSpeed;
 
+    double turnLimit = SwerveConstants.TELE_DRIVE_MAX_ANGULAR_ACCELERATION;
+
+    if(Math.abs(frontSpeed)>0.1||Math.abs(sideSpeed)>0.1){
+      turnLimit *= 0.2;
+    }
+
     frontSpeed = frontLimiter.calculate(frontSpeed) * SwerveConstants.TELE_DRIVE_MAX_SPEED;
     sideSpeed = sideLimiter.calculate(sideSpeed) * SwerveConstants.TELE_DRIVE_MAX_SPEED;
     turnSpeed = turnLimiter.calculate(turnSpeed) * SwerveConstants.TELE_DRIVE_MAX_ANGULAR_SPEED;
+
+
+    //left
+    // if(sideSpeed > 0.1 && Math.abs(RobotContainer.driverController.getLeftX())>0){
+    //   turnSpeed = 0.08;
+    // }
+
+    // //right
+    // if(turnSpeed<-0.1 && Math.abs(RobotContainer.driverController.getLeftX())>0){
+    //   turnSpeed = -0.08;
+    // }
+
+
 
     ChassisSpeeds chassisSpeeds;
     if(fieldOriented){

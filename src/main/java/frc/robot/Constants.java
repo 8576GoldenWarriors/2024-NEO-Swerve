@@ -46,10 +46,10 @@ public final class Constants {
     public static final int PIGEON_ID = 0;
 
     //Drivetrain characteristics
-    public static final double LEFT_FRONT_OFFSET = 327;//94.307; //78.838;//330; Id: 2
-    public static final double RIGHT_FRONT_OFFSET = 55;//148.975; //94.307;//49; Id: 4
-    public static final double LEFT_BACK_OFFSET = 272;//78.838;  //230.713;// 275; Id: 1
-    public static final double RIGHT_BACK_OFFSET = 264;//final//230.713; //148.975;//260.5; Id: 3
+    public static final double LEFT_FRONT_OFFSET = 1;//293.467;//327;//abs 329.941 Id: 2
+    public static final double RIGHT_FRONT_OFFSET = 249;//160.576;// 55;//230.625 Id: 4
+    public static final double LEFT_BACK_OFFSET = 357.848;//186.152;//272;//abs 274.685 Id: 1
+    public static final double RIGHT_BACK_OFFSET = 101.643;//66.357;//264;//258.926 Id: 3
 
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(3.5); //originally 4 in template
     public static final double DRIVE_MOTOR_GEAR_RATIO = 6.75;
@@ -58,7 +58,7 @@ public final class Constants {
     public static final double TURN_MOTOR_PCONVERSION = 2 * Math.PI / TURN_MOTOR_GEAR_RATIO;
     public static final double DRIVE_MOTOR_VCONVERSION = DRIVE_MOTOR_PCONVERSION / 60.0;
     public static final double TURN_MOTOR_VCONVERSION = TURN_MOTOR_PCONVERSION / 60.0;
-    public static final double KP_TURNING = 0.6;
+    public static final double KP_TURNING = 0.575;
 
     public static final double DRIVETRAIN_MAX_SPEED = 1.75; //4.0
     public static final double DRIVETRAIN_MAX_ANGULAR_SPEED = 1.25 * Math.PI; //3.5
@@ -66,18 +66,18 @@ public final class Constants {
     //Teleop constraints
     public static final double TELE_DRIVE_MAX_SPEED = DRIVETRAIN_MAX_SPEED / 1;
     public static final double TELE_DRIVE_MAX_ANGULAR_SPEED = DRIVETRAIN_MAX_ANGULAR_SPEED / 1.75;
-    public static final double TELE_DRIVE_MAX_ACCELERATION = 3; //3
-    public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION = 3; //3
+    public static final double TELE_DRIVE_MAX_ACCELERATION = 2; //3
+    public static final double TELE_DRIVE_MAX_ANGULAR_ACCELERATION = 12; //3
 
     //Auton constraints
     public static final double AUTO_DRIVE_MAX_SPEED = DRIVETRAIN_MAX_SPEED / 1.5;
     public static final double AUTO_DRIVE_MAX_ANGULAR_SPEED = DRIVETRAIN_MAX_ANGULAR_SPEED / 2.0;
-    public static final double AUTO_DRIVE_MAX_ACCELERATION = 3;
+    public static final double AUTO_DRIVE_MAX_ACCELERATION = 2.5;
     public static final double AUTO_DRIVE_MAX_ANGULAR_ACCELERATION = Math.PI;
 
-    public static final double AUTO_kP_FRONT = 0.4;
-    public static final double AUTO_kP_SIDE = 0.4;
-    public static final double AUTO_kP_TURN = 0.5; //2.4
+    // public static final double AUTO_kP_FRONT = 0.4;
+    // public static final double AUTO_kP_SIDE = 0.4;
+    // public static final double AUTO_kP_TURN = 0.5; //2.4
 
     //Swerve Kinematics
     public static final double TRACK_WIDTH = Units.inchesToMeters(18.75);
@@ -89,8 +89,8 @@ public final class Constants {
         new Translation2d(-WHEEL_BASE / 2, -TRACK_WIDTH / 2)
     );
 
-    public static final double kS_PERCENT = 0.035;
-    public static final double kP_PERCENT = 0.009;
+    public static final double kS_PERCENT = 0.0025;
+    public static final double kP_PERCENT = 0.0009;
 
     //Odometry
     public static final Vector<N3> ODOMETRY_STD_DEV = VecBuilder.fill(0.02, 0.02, 0.005);
