@@ -150,7 +150,7 @@ public class Drivetrain extends SubsystemBase {
     turnSpeed = turnLimiter.calculate(turnSpeed) * SwerveConstants.TELE_DRIVE_MAX_ANGULAR_SPEED;
 
 
-    //left
+    // //left
     // if(sideSpeed > 0.1 && Math.abs(RobotContainer.driverController.getLeftX())>0){
     //   turnSpeed = 0.08;
     // }
@@ -169,6 +169,8 @@ public class Drivetrain extends SubsystemBase {
     else{
       chassisSpeeds = new ChassisSpeeds(frontSpeed, sideSpeed, turnSpeed);
     }
+
+    //correctForDynamics(chassisSpeeds)
 
     SwerveModuleState[] moduleStates = SwerveConstants.DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds, centerOfRotation);
 

@@ -98,6 +98,7 @@ public class Robot extends LoggedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    //System.out.println();
     RobotContainer.drivetrain.resetAllEncoders();
     RobotContainer.drivetrain.setNormalMode();
   }
