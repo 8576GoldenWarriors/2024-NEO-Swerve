@@ -101,9 +101,11 @@ public class SwerveModule extends SubsystemBase {
 
   public void resetEncoders(){
     driveEncoder.setPosition(0);
+    
     System.out.println(getAbsoluteEncoderAngle());
     System.out.println(turnEncoder.getPosition());
     System.out.println(driveMotorId);
+    
     turnEncoder.setPosition((getAbsoluteEncoderAngle()) / SwerveConstants.TURN_MOTOR_PCONVERSION);
     System.out.println(turnEncoder.getPosition());
   }
