@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;    //com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -23,6 +24,7 @@ public class SwerveModule extends SubsystemBase {
   private PearadoxSparkMax turnMotor;
 
   private int driveMotorId;
+  private int turnMotorId;
 
   private RelativeEncoder driveEncoder;
   private RelativeEncoder turnEncoder;
@@ -46,6 +48,8 @@ public class SwerveModule extends SubsystemBase {
       turnMotor = new PearadoxSparkMax(turnMotorId, MotorType.kBrushless, IdleMode.kCoast, 25, turnMotorReversed);
 
       this.driveMotorId = driveMotorId;
+      this.turnMotorId = turnMotorId;
+
       driveEncoder = driveMotor.getEncoder();
       turnEncoder = turnMotor.getEncoder();
 
@@ -93,21 +97,25 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public double getAbsoluteEncoderAngle(){
+    System.out.println("Absolute Encoder: "+absoluteEncoder.getAbsolutePosition());
     double angle = absoluteEncoder.getAbsolutePosition().getValueAsDouble();
-    angle -= absoluteEncoderOffset;
-    angle *= (Math.PI / 180);
-    return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
+    angle-=absoluteEncoderOffset;
+    return angle;
+    // angle -= absoluteEncoderOffset;
+    // //angle *= (Math.PI / 180);
+    // return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
   }
 
   public void resetEncoders(){
+    System.out.println("Turn Enocder: "+turnEncoder.getPosition());
     driveEncoder.setPosition(0);
     
-    System.out.println(getAbsoluteEncoderAngle());
-    System.out.println(turnEncoder.getPosition());
-    System.out.println(driveMotorId);
-    
+    //System.out.println(getAbsoluteEncoderAngle());
+    //System.out.println(turnEncoder.getPosition());
+    //System.out.println(driveMotorId);
+    //(0.5);
     turnEncoder.setPosition((getAbsoluteEncoderAngle()) / SwerveConstants.TURN_MOTOR_PCONVERSION);
-    System.out.println(turnEncoder.getPosition());
+    //System.out.println(turnEncoder.getPosition());
   }
 
   public SwerveModuleState getState(){

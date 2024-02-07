@@ -35,7 +35,7 @@ public class Drivetrain extends SubsystemBase {
   private SwerveModule rightFront = new SwerveModule(
     SwerveConstants.RIGHT_FRONT_DRIVE_ID, 
     SwerveConstants.RIGHT_FRONT_TURN_ID, 
-    false, 
+    true, 
     true, 
     SwerveConstants.RIGHT_FRONT_CANCODER_ID, 
     SwerveConstants.RIGHT_FRONT_OFFSET, 

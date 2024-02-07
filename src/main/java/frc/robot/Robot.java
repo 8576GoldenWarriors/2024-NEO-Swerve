@@ -45,6 +45,8 @@ public class Robot extends LoggedRobot {
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
 
     m_robotContainer = new RobotContainer();
+
+    RobotContainer.drivetrain.resetAllEncoders();
   }
 
   /**
@@ -86,7 +88,9 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+
+  }
 
   @Override
   public void teleopInit() {
@@ -99,7 +103,6 @@ public class Robot extends LoggedRobot {
       m_autonomousCommand.cancel();
     }
     //System.out.println();
-    RobotContainer.drivetrain.resetAllEncoders();
     RobotContainer.drivetrain.setNormalMode();
   }
 
