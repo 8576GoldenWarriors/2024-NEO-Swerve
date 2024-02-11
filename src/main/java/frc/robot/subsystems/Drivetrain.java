@@ -30,7 +30,7 @@ public class Drivetrain extends SubsystemBase {
     true, 
     SwerveConstants.LEFT_FRONT_CANCODER_ID, 
     SwerveConstants.LEFT_FRONT_OFFSET, 
-    false);
+    false, SwerveConstants.LEFT_FRONT_MAGNET_OFFSET);
 
   private SwerveModule rightFront = new SwerveModule(
     SwerveConstants.RIGHT_FRONT_DRIVE_ID, 
@@ -39,7 +39,7 @@ public class Drivetrain extends SubsystemBase {
     true, 
     SwerveConstants.RIGHT_FRONT_CANCODER_ID, 
     SwerveConstants.RIGHT_FRONT_OFFSET, 
-    false);
+    false, SwerveConstants.RIGHT_FRONT_MAGNET_OFFSET);
 
   private SwerveModule leftBack = new SwerveModule(
     SwerveConstants.LEFT_BACK_DRIVE_ID, 
@@ -48,7 +48,7 @@ public class Drivetrain extends SubsystemBase {
     true, 
     SwerveConstants.LEFT_BACK_CANCODER_ID, 
     SwerveConstants.LEFT_BACK_OFFSET, 
-    false);
+    false, SwerveConstants.LEFT_BACK_MAGNET_OFFSET);
 
   private SwerveModule rightBack = new SwerveModule(
     SwerveConstants.RIGHT_BACK_DRIVE_ID, 
@@ -57,7 +57,7 @@ public class Drivetrain extends SubsystemBase {
     true, 
     SwerveConstants.RIGHT_BACK_CANCODER_ID, 
     SwerveConstants.RIGHT_BACK_OFFSET, 
-    false);
+    false, SwerveConstants.RIGHT_BACK_MAGNET_OFFSET);
 
   private SlewRateLimiter frontLimiter = new SlewRateLimiter(SwerveConstants.TELE_DRIVE_MAX_ACCELERATION);
   private SlewRateLimiter sideLimiter = new SlewRateLimiter(SwerveConstants.TELE_DRIVE_MAX_ACCELERATION);
@@ -104,27 +104,27 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putString("Pose", getPose().toString());
     //rates 2 is yaw (XYZ in order )
     SmartDashboard.putString("Angular Speed", new DecimalFormat("#.00").format((yaw/ 180)) + "pi rad/s");
-    Logger.recordOutput("Robot Angle", getHeading());
-    Logger.recordOutput("Robot Pitch", getPitch());
-    Logger.recordOutput("Robot Roll", getRoll());
-    Logger.recordOutput("Pose", getPose().toString());
-    Logger.recordOutput("Angular Speed", new DecimalFormat("#.00").format((yaw / 180)) + "pi rad/s" );
+    // Logger.recordOutput("Robot Angle", getHeading());
+    // Logger.recordOutput("Robot Pitch", getPitch());
+    // Logger.recordOutput("Robot Roll", getRoll());
+    // Logger.recordOutput("Pose", getPose().toString());
+    // Logger.recordOutput("Angular Speed", new DecimalFormat("#.00").format((yaw / 180)) + "pi rad/s" );
 
     //new values
     SmartDashboard.putNumber("Left Front Module Velocity", leftFront.getDriveMotorVelocity());
     SmartDashboard.putNumber("Right Front Module Velocity", rightFront.getDriveMotorVelocity());
     SmartDashboard.putNumber("Left Back Module Velocity", leftBack.getDriveMotorVelocity());
     SmartDashboard.putNumber("Right Back Module Velocity", rightBack.getDriveMotorVelocity());
-    Logger.recordOutput("Left Front Module Velocity", leftFront.getDriveMotorVelocity());
-    Logger.recordOutput("Right Front Module Velocity", rightFront.getDriveMotorVelocity());
-    Logger.recordOutput("Left Back Module Velocity", leftBack.getDriveMotorVelocity());
-    Logger.recordOutput("Right Back Module Velocity", rightBack.getDriveMotorVelocity());
+    // Logger.recordOutput("Left Front Module Velocity", leftFront.getDriveMotorVelocity());
+    // Logger.recordOutput("Right Front Module Velocity", rightFront.getDriveMotorVelocity());
+    // Logger.recordOutput("Left Back Module Velocity", leftBack.getDriveMotorVelocity());
+    // Logger.recordOutput("Right Back Module Velocity", rightBack.getDriveMotorVelocity());
   
 
-    Logger.recordOutput("Drivetrain/Robot Angle", getHeadingRotation2d().getRadians());
-    Logger.recordOutput("Drivetrain/Pose", getPose());
-    Logger.recordOutput("Drivetrain/Angular Speed", yaw / 180);
-    Logger.recordOutput("Drivetrain/Module States", getModuleStates());
+    // Logger.recordOutput("Drivetrain/Robot Angle", getHeadingRotation2d().getRadians());
+    // Logger.recordOutput("Drivetrain/Pose", getPose());
+    // Logger.recordOutput("Drivetrain/Angular Speed", yaw / 180);
+    // Logger.recordOutput("Drivetrain/Module States", getModuleStates());
   }
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed, 
@@ -350,6 +350,13 @@ public class Drivetrain extends SubsystemBase {
     rightFront.setDesiredState(moduleStates[1]);
     leftBack.setDesiredState(moduleStates[2]);
     rightBack.setDesiredState(moduleStates[3]);
+  }
+
+  public void setModuleZero(){
+    leftFront.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+    rightFront.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+    leftBack.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+    rightBack.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
   }
 
   public SwerveModuleState[] getModuleStates(){

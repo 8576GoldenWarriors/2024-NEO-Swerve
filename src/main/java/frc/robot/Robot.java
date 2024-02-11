@@ -9,8 +9,10 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.Drivetrain;
 
 /**
@@ -36,17 +38,17 @@ public class Robot extends LoggedRobot {
     //Reset NavX?!?!?!?!?
 
     setUseTiming(isReal());
-    Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+    // Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
 
-    if (isReal()) {
-        Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
-        Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-    }
-    Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
+    // if (isReal()) {
+    //     Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
+    //     Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+    // }
+    // Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may be added.
 
     m_robotContainer = new RobotContainer();
 
-    RobotContainer.drivetrain.resetAllEncoders();
+    //RobotContainer.drivetrain.resetAllEncoders();
   }
 
   /**
@@ -69,6 +71,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void disabledInit() {
     RobotContainer.drivetrain.setAllIdleMode(true);
+    //RobotContainer.drivetrain.setModuleZero();
   }
 
   @Override

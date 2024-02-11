@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 import org.littletonrobotics.junction.Logger;
+
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
@@ -36,13 +38,19 @@ public class SwerveModule extends SubsystemBase {
   private double absoluteEncoderOffset;
   private Rotation2d lastAngle;
 
+  //CANcoderConfiguration config = new CANcoderConfiguration();
+
+
   /** Creates a new SwerveModule. */
   public SwerveModule(int driveMotorId, int turnMotorId, boolean driveMotorReversed, boolean turnMotorReversed,
-    int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed) {
+    int absoluteEncoderId, double absoluteEncoderOffset, boolean absoluteEncoderReversed, double magnetOffset) {
       this.absoluteEncoderOffset = absoluteEncoderOffset;
       this.absoluteEncoderReversed = absoluteEncoderReversed;
 
-      
+      //CANcoderConfiguration config = new CANcoderConfiguration();
+      //config.MagnetSensor.MagnetOffset = absoluteEncoderOffset;
+
+      //absoluteEncoder.getConfigurator().apply(config);
 
       driveMotor = new PearadoxSparkMax(driveMotorId, MotorType.kBrushless, IdleMode.kCoast, 45, driveMotorReversed);
       turnMotor = new PearadoxSparkMax(turnMotorId, MotorType.kBrushless, IdleMode.kCoast, 25, turnMotorReversed);
@@ -56,8 +64,13 @@ public class SwerveModule extends SubsystemBase {
       new WaitCommand(0.1);
       absoluteEncoder = new CANcoder(absoluteEncoderId);
 
+      CANcoderConfiguration config = new CANcoderConfiguration();
+      config.MagnetSensor.MagnetOffset = magnetOffset;
+
+      absoluteEncoder.getConfigurator().apply(config);
+
       turnPIDController = new PIDController(SwerveConstants.KP_TURNING, 0, 0);
-      turnPIDController.enableContinuousInput(-Math.PI, Math.PI);
+      turnPIDController.enableContinuousInput(-1, 1);//-Math.PI, Math.PI);
 
       resetEncoders();
       lastAngle = getState().angle;
@@ -110,11 +123,11 @@ public class SwerveModule extends SubsystemBase {
     System.out.println("Turn Enocder: "+turnEncoder.getPosition());
     driveEncoder.setPosition(0);
     
-    //System.out.println(getAbsoluteEncoderAngle());
+    System.out.println(getAbsoluteEncoderAngle());
     //System.out.println(turnEncoder.getPosition());
     //System.out.println(driveMotorId);
     //(0.5);
-    turnEncoder.setPosition((getAbsoluteEncoderAngle()) / SwerveConstants.TURN_MOTOR_PCONVERSION);
+    turnEncoder.setPosition((getAbsoluteEncoderAngle()));// / SwerveConstants.TURN_MOTOR_PCONVERSION);
     //System.out.println(turnEncoder.getPosition());
   }
 
@@ -132,7 +145,7 @@ public class SwerveModule extends SubsystemBase {
     setAngle(desiredState);
     setSpeed(desiredState);
     SmartDashboard.putString("Swerve [" + driveMotor.getDeviceId() + "] State", getState().toString());
-    Logger.recordOutput("Drivetrain/Module " + driveMotor.getDeviceId() + " State", getState());
+    //Logger.recordOutput("Drivetrain/Module " + driveMotor.getDeviceId() + " State", getState());
   }
 
   public void setRawState(SwerveModuleState desiredState){
@@ -141,7 +154,7 @@ public class SwerveModule extends SubsystemBase {
     setRawAngle(desiredState);
     setSpeed(desiredState);
     SmartDashboard.putString("Swerve [" + driveMotor.getDeviceId() + "] State", getState().toString());
-    Logger.recordOutput("Drivetrain/Module " + driveMotor.getDeviceId() + " State", getState());
+    //Logger.recordOutput("Drivetrain/Module " + driveMotor.getDeviceId() + " State", getState());
     
   }
 

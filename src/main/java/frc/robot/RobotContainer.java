@@ -55,7 +55,8 @@ public class RobotContainer {
 
   private void configureBindings() {
     //Driver controller
-    resetHeading_Start.onTrue(new InstantCommand(drivetrain::zeroHeading, drivetrain));
+    resetHeading_Start.onTrue(
+      new InstantCommand(drivetrain::zeroHeading, drivetrain));
   }
 
   /**
