@@ -300,6 +300,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetAllEncoders(){
+    System.out.println("resetAllEncoders()");
     leftFront.resetEncoders();
     rightFront.resetEncoders();
     leftBack.resetEncoders();

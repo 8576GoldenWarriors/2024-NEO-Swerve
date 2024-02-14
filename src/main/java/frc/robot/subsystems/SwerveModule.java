@@ -7,6 +7,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;    //com.revrobotics.CANSparkMax.IdleMode;
@@ -64,16 +65,21 @@ public class SwerveModule extends SubsystemBase {
       new WaitCommand(0.1);
       absoluteEncoder = new CANcoder(absoluteEncoderId);
 
-      CANcoderConfiguration config = new CANcoderConfiguration();
+      /*CANcoderConfiguration config = new CANcoderConfiguration();
       config.MagnetSensor.MagnetOffset = magnetOffset;
 
-      absoluteEncoder.getConfigurator().apply(config);
+      config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
+
+      absoluteEncoder.getConfigurator().apply(config);*/
 
       turnPIDController = new PIDController(SwerveConstants.KP_TURNING, 0, 0);
-      turnPIDController.enableContinuousInput(-1, 1);//-Math.PI, Math.PI);
+      turnPIDController.enableContinuousInput(0, 1);//-Math.PI, Math.PI);
 
       resetEncoders();
       lastAngle = getState().angle;
+
+      
+      System.out.println("Motor ID" + turnMotorId + " Angle " + getState().angle);
   }
 
   @Override
@@ -110,24 +116,29 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public double getAbsoluteEncoderAngle(){
-    System.out.println("Absolute Encoder: "+absoluteEncoder.getAbsolutePosition());
+    //System.out.println("Absolute Encoder: "+absoluteEncoder.getAbsolutePosition());
     double angle = absoluteEncoder.getAbsolutePosition().getValueAsDouble();
+    //angle /= 360;
     angle-=absoluteEncoderOffset;
     return angle;
     // angle -= absoluteEncoderOffset;
-    // //angle *= (Math.PI / 180);
+    //angle *= (Math.PI / 180);
     // return angle * (absoluteEncoderReversed ? -1.0 : 1.0);
   }
 
   public void resetEncoders(){
-    System.out.println("Turn Enocder: "+turnEncoder.getPosition());
+    //System.out.println("Turn Enocder: "+turnEncoder.getPosition());
     driveEncoder.setPosition(0);
+
+    //System.out.print(turnMotorId + " ");
     
-    System.out.println(getAbsoluteEncoderAngle());
+    //System.out.println(getAbsoluteEncoderAngle());
+
+    //System.out.println("TurnMotor Conversion" + absoluteEncoder.getAbsolutePosition().getValueAsDouble());
     //System.out.println(turnEncoder.getPosition());
-    //System.out.println(driveMotorId);
-    //(0.5);
     turnEncoder.setPosition((getAbsoluteEncoderAngle()));// / SwerveConstants.TURN_MOTOR_PCONVERSION);
+
+    SmartDashboard.putNumber("Turn encoder", getAbsoluteEncoderAngle());
     //System.out.println(turnEncoder.getPosition());
   }
 
@@ -173,16 +184,19 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void setAngle(SwerveModuleState desiredState){
-    Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (SwerveConstants.DRIVETRAIN_MAX_SPEED * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+    Rotation2d angle = desiredState.angle;// (Math.abs(desiredState.speedMetersPerSecond) <= (SwerveConstants.DRIVETRAIN_MAX_SPEED * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+    //System.out.println(turnMotorId + " Angle " + angle);
     
-    turnMotor.set(turnPIDController.calculate(getTurnMotorPosition(), desiredState.angle.getRadians()));
+    turnMotor.set(turnPIDController.calculate(getTurnMotorPosition(), (4 * (double) desiredState.angle.getRotations())));
+
+    //System.out.println(desiredState.angle.getRotations());
     lastAngle = angle;
   }
 
   public void setRawAngle(SwerveModuleState desiredState){
     Rotation2d angle = desiredState.angle;
 
-    turnMotor.set(turnPIDController.calculate(getTurnMotorPosition(), desiredState.angle.getRadians()));
+    turnMotor.set(turnPIDController.calculate(getTurnMotorPosition(), (double) desiredState.angle.getRotations()));
     lastAngle = angle;
   }
   
