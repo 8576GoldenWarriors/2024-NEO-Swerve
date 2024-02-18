@@ -47,10 +47,10 @@ public final class Constants {
 
     //Drivetrain characteristics
     //OFFSETS NOW IN ROTATIONS
-    public static final double LEFT_FRONT_MAGNET_OFFSET = -0.412842;
-    public static final double RIGHT_FRONT_MAGNET_OFFSET = 0;
-    public static final double LEFT_BACK_MAGNET_OFFSET = -0.337646;
-    public static final double RIGHT_BACK_MAGNET_OFFSET = 0.25;
+    public static final double LEFT_FRONT_MAGNET_OFFSET = 0.0; // 0.412842;
+    public static final double RIGHT_FRONT_MAGNET_OFFSET = 0.0;
+    public static final double LEFT_BACK_MAGNET_OFFSET = 0.0; //-0.337646;
+    public static final double RIGHT_BACK_MAGNET_OFFSET = 0.0; //0.25;
 
     public static final double LEFT_FRONT_OFFSET = 0;//329.941;//293.467; //1;//293.467;//327;//abs 329.941 Id: 2
     public static final double RIGHT_FRONT_OFFSET = 0;//230.625;//160.576;//249;//160.576;// 55;//230.625 Id: 4

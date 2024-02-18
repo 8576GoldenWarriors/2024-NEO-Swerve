@@ -35,7 +35,7 @@ public class Drivetrain extends SubsystemBase {
   private SwerveModule rightFront = new SwerveModule(
     SwerveConstants.RIGHT_FRONT_DRIVE_ID, 
     SwerveConstants.RIGHT_FRONT_TURN_ID, 
-    true, 
+    false, //used to be true, might have to change back - Om: 2/14/24
     true, 
     SwerveConstants.RIGHT_FRONT_CANCODER_ID, 
     SwerveConstants.RIGHT_FRONT_OFFSET, 
@@ -44,7 +44,7 @@ public class Drivetrain extends SubsystemBase {
   private SwerveModule leftBack = new SwerveModule(
     SwerveConstants.LEFT_BACK_DRIVE_ID, 
     SwerveConstants.LEFT_BACK_TURN_ID, 
-    false, 
+    true, 
     true, 
     SwerveConstants.LEFT_BACK_CANCODER_ID, 
     SwerveConstants.LEFT_BACK_OFFSET, 
@@ -128,7 +128,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void swerveDrive(double frontSpeed, double sideSpeed, double turnSpeed, 
-    boolean fieldOriented, Translation2d centerOfRotation, boolean deadband){ //Drive with rotational speed control w/ joystick
+    boolean fieldOriented, Translation2d centerOfRotation, boolean deadband){ 
+      //Drive with rotational speed control w/ joystick
     if(deadband){
       frontSpeed = Math.abs(frontSpeed) > 0.15 ? frontSpeed : 0;
       sideSpeed = Math.abs(sideSpeed) > 0.15 ? sideSpeed : 0;

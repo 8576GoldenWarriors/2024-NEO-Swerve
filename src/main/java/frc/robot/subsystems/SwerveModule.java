@@ -65,21 +65,19 @@ public class SwerveModule extends SubsystemBase {
       new WaitCommand(0.1);
       absoluteEncoder = new CANcoder(absoluteEncoderId);
 
-      /*CANcoderConfiguration config = new CANcoderConfiguration();
+      CANcoderConfiguration config = new CANcoderConfiguration();
       config.MagnetSensor.MagnetOffset = magnetOffset;
 
       config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
 
-      absoluteEncoder.getConfigurator().apply(config);*/
+      absoluteEncoder.getConfigurator().apply(config);
 
       turnPIDController = new PIDController(SwerveConstants.KP_TURNING, 0, 0);
       turnPIDController.enableContinuousInput(0, 1);//-Math.PI, Math.PI);
 
       resetEncoders();
       lastAngle = getState().angle;
-
-      
-      System.out.println("Motor ID" + turnMotorId + " Angle " + getState().angle);
+      //System.out.println("Motor ID" + turnMotorId + " Angle " + getState().angle);
   }
 
   @Override
@@ -116,7 +114,7 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public double getAbsoluteEncoderAngle(){
-    //System.out.println("Absolute Encoder: "+absoluteEncoder.getAbsolutePosition());
+    System.out.println("Absolute Encoder: "+ absoluteEncoder.getAbsolutePosition());
     double angle = absoluteEncoder.getAbsolutePosition().getValueAsDouble();
     //angle /= 360;
     angle-=absoluteEncoderOffset;
@@ -130,7 +128,7 @@ public class SwerveModule extends SubsystemBase {
     //System.out.println("Turn Enocder: "+turnEncoder.getPosition());
     driveEncoder.setPosition(0);
 
-    //System.out.print(turnMotorId + " ");
+    System.out.print(turnMotorId + " ");
     
     //System.out.println(getAbsoluteEncoderAngle());
 
@@ -138,7 +136,8 @@ public class SwerveModule extends SubsystemBase {
     //System.out.println(turnEncoder.getPosition());
     turnEncoder.setPosition((getAbsoluteEncoderAngle()));// / SwerveConstants.TURN_MOTOR_PCONVERSION);
 
-    SmartDashboard.putNumber("Turn encoder", getAbsoluteEncoderAngle());
+    //SmartDashboard.putNumber("Turn encoder" + turnMotorId, getAbsoluteEncoderAngle());
+    SmartDashboard.putString("Turn encoder" + turnMotorId, turnEncoder.toString());
     //System.out.println(turnEncoder.getPosition());
   }
 
@@ -157,6 +156,7 @@ public class SwerveModule extends SubsystemBase {
     setSpeed(desiredState);
     SmartDashboard.putString("Swerve [" + driveMotor.getDeviceId() + "] State", getState().toString());
     //Logger.recordOutput("Drivetrain/Module " + driveMotor.getDeviceId() + " State", getState());
+//    SmartDashboard.putNumber("Turn Encoder " + turnEncoder, absoluteEncoderOffset)
   }
 
   public void setRawState(SwerveModuleState desiredState){
@@ -184,7 +184,10 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void setAngle(SwerveModuleState desiredState){
-    Rotation2d angle = desiredState.angle;// (Math.abs(desiredState.speedMetersPerSecond) <= (SwerveConstants.DRIVETRAIN_MAX_SPEED * 0.01)) ? lastAngle : desiredState.angle; //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+    // Rotation2d angle = desiredState.angle;
+
+    //Prevent rotating module if speed is less then 1%. Prevents Jittering.
+    Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (SwerveConstants.DRIVETRAIN_MAX_SPEED * 0.01)) ? lastAngle : desiredState.angle; 
     //System.out.println(turnMotorId + " Angle " + angle);
     
     turnMotor.set(turnPIDController.calculate(getTurnMotorPosition(), (4 * (double) desiredState.angle.getRotations())));
