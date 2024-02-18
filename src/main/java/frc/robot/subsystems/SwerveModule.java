@@ -3,15 +3,13 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-import org.littletonrobotics.junction.Logger;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
-import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;    //com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -73,9 +71,10 @@ public class SwerveModule extends SubsystemBase {
       absoluteEncoder.getConfigurator().apply(config);
 
       turnPIDController = new PIDController(SwerveConstants.KP_TURNING, 0, 0);
-      turnPIDController.enableContinuousInput(0, 1);//-Math.PI, Math.PI);
+      turnPIDController.enableContinuousInput(-Math.PI, Math.PI);//-Math.PI, Math.PI);
 
       resetEncoders();
+      //last angle in degrees
       lastAngle = getState().angle;
       //System.out.println("Motor ID" + turnMotorId + " Angle " + getState().angle);
   }
@@ -106,6 +105,8 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public double getTurnMotorPosition(){
+    //is relative encoder getPosition in radians or rotations?
+    //documentation says its in rotations
     return turnEncoder.getPosition() * SwerveConstants.TURN_MOTOR_PCONVERSION;
   }
 
@@ -113,11 +114,13 @@ public class SwerveModule extends SubsystemBase {
     return turnEncoder.getVelocity() * SwerveConstants.TURN_MOTOR_VCONVERSION;
   }
 
+  
+  //returning rotations
   public double getAbsoluteEncoderAngle(){
-    System.out.println("Absolute Encoder: "+ absoluteEncoder.getAbsolutePosition());
+    // System.out.println("Absolute Encoder: "+ absoluteEncoder.getAbsolutePosition());
     double angle = absoluteEncoder.getAbsolutePosition().getValueAsDouble();
     //angle /= 360;
-    angle-=absoluteEncoderOffset;
+    // angle-=absoluteEncoderOffset;
     return angle;
     // angle -= absoluteEncoderOffset;
     //angle *= (Math.PI / 180);
@@ -130,7 +133,7 @@ public class SwerveModule extends SubsystemBase {
 
     System.out.print(turnMotorId + " ");
     
-    //System.out.println(getAbsoluteEncoderAngle());
+    System.out.println(getAbsoluteEncoderAngle());
 
     //System.out.println("TurnMotor Conversion" + absoluteEncoder.getAbsolutePosition().getValueAsDouble());
     //System.out.println(turnEncoder.getPosition());
@@ -142,6 +145,8 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public SwerveModuleState getState(){
+    //!!!!!
+    //ROTATION2D CONSTRUCTOR TAKES IN RADIANS
     return new SwerveModuleState(getDriveMotorVelocity(), new Rotation2d(getTurnMotorPosition()));
   }
 
@@ -190,7 +195,7 @@ public class SwerveModule extends SubsystemBase {
     Rotation2d angle = (Math.abs(desiredState.speedMetersPerSecond) <= (SwerveConstants.DRIVETRAIN_MAX_SPEED * 0.01)) ? lastAngle : desiredState.angle; 
     //System.out.println(turnMotorId + " Angle " + angle);
     
-    turnMotor.set(turnPIDController.calculate(getTurnMotorPosition(), (4 * (double) desiredState.angle.getRotations())));
+    turnMotor.set(turnPIDController.calculate(getTurnMotorPosition(), (SwerveConstants.TURN_MOTOR_PCONVERSION * (double) desiredState.angle.getRadians())));
 
     //System.out.println(desiredState.angle.getRotations());
     lastAngle = angle;
@@ -199,7 +204,7 @@ public class SwerveModule extends SubsystemBase {
   public void setRawAngle(SwerveModuleState desiredState){
     Rotation2d angle = desiredState.angle;
 
-    turnMotor.set(turnPIDController.calculate(getTurnMotorPosition(), (double) desiredState.angle.getRotations()));
+    turnMotor.set(turnPIDController.calculate(getTurnMotorPosition(), (double) desiredState.angle.getRadians()));
     lastAngle = angle;
   }
   

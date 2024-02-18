@@ -35,7 +35,7 @@ public class Drivetrain extends SubsystemBase {
   private SwerveModule rightFront = new SwerveModule(
     SwerveConstants.RIGHT_FRONT_DRIVE_ID, 
     SwerveConstants.RIGHT_FRONT_TURN_ID, 
-    false, //used to be true, might have to change back - Om: 2/14/24
+    true, //used to be true, might have to change back - Om: 2/14/24
     true, 
     SwerveConstants.RIGHT_FRONT_CANCODER_ID, 
     SwerveConstants.RIGHT_FRONT_OFFSET, 
@@ -115,10 +115,10 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Right Front Module Velocity", rightFront.getDriveMotorVelocity());
     SmartDashboard.putNumber("Left Back Module Velocity", leftBack.getDriveMotorVelocity());
     SmartDashboard.putNumber("Right Back Module Velocity", rightBack.getDriveMotorVelocity());
-    // Logger.recordOutput("Left Front Module Velocity", leftFront.getDriveMotorVelocity());
-    // Logger.recordOutput("Right Front Module Velocity", rightFront.getDriveMotorVelocity());
-    // Logger.recordOutput("Left Back Module Velocity", leftBack.getDriveMotorVelocity());
-    // Logger.recordOutput("Right Back Module Velocity", rightBack.getDriveMotorVelocity());
+    SmartDashboard.putNumber("Left Front Module abs angle", leftFront.getAbsoluteEncoderAngle());
+    SmartDashboard.putNumber("Right Front Module abs angle", rightFront.getAbsoluteEncoderAngle());
+    SmartDashboard.putNumber("Left Back Module abs angle", leftBack.getAbsoluteEncoderAngle());
+    SmartDashboard.putNumber("Right Back Module abs angle", rightBack.getAbsoluteEncoderAngle());
   
 
     // Logger.recordOutput("Drivetrain/Robot Angle", getHeadingRotation2d().getRadians());
